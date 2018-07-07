@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  dndsearch.api:
+    image: ${DOCKER_REGISTRY}dndsearchapi
+    build:
+      context: .
+      dockerfile: DndSearch.Api\Dockerfile
