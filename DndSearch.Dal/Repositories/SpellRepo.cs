@@ -6,12 +6,46 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DndSearch.Dal.Repositories
 {
     public class SpellRepo : RepoBase<Entity.Spell>, ISpellRepo
     {
-        
+        public int CreateSpell(Spell newSpell)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Spell> GetAllSpells()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spell GetSpell(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveSpell(int spellId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Spell> SearchSpellName(string searchTerm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Spell> SearchSpells(Expression<Func<Spell, bool>> searchParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSpell(Spell spell)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     internal static class SpellMapper

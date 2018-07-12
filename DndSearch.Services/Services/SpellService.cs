@@ -13,6 +13,11 @@ namespace DndSearch.Services.Services
     {
         private readonly ISpellRepo spellRepo;
 
+        public SpellService(ISpellRepo spellRepo)
+        {
+            this.spellRepo = spellRepo;
+        }
+
         public int CreateSpell(CreateSpellRequest request)
         {
             //Check for nulls
