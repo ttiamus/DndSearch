@@ -9,7 +9,7 @@ namespace DndSearch.Services.Interfaces
 {
     public interface ISpellService
     {
-        IEnumerable<Spell> GetSpells();
+        IEnumerable<Spell> GetAllSpells();
         Spell GetSpell(int id);
         int CreateSpell(CreateSpellRequest request);
         void RemoveSpell(int id);

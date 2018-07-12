@@ -1,12 +1,21 @@
 ﻿using DndSearch.Dal.Base;
-using DndSearch.EntityFramework.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DndSearch.Domain.Models;
+using System.Linq.Expressions;
 
 namespace DndSearch.Dal.Interfaces
 {
-    public interface ISpellRepo : IRepo<Spell>
+    //Not implementing IRepo to prevent those methods from being exposed past concrete repo
+    public interface ISpellRepo //: IRepo<Entity.Spell> 
     {
+        Spell GetSpell(int id);
+        IEnumerable<Spell> SearchSpellName(string searchTerm);
+        IEnumerable<Spell> GetAllSpells();
+        IEnumerable<Spell> SearchSpells(Expression<Func<Spell, bool>> searchParams);
+        int CreateSpell(Spell newSpell);
+        void RemoveSpell(int spellId);
+        void UpdateSpell(Spell spell);
     }
 }

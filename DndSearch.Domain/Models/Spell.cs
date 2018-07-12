@@ -5,25 +5,77 @@ namespace DndSearch.Domain.Models
 {
     public class Spell
     {
-        public int Id { get; set; }
-        public int Level { get; set; }
-        public string Name { get; set; }
-        public string Duration { get; set; }
-        public bool Concentration { get; set; }
-        public bool VerbalComponent { get; set; }
-        public bool SomaticComponent { get; set; }
-        public bool MaterialComponent { get; set; }
-        public int? MaterialComponentCost { get; set; }
-        public bool RequiresTouchAttack { get; set; }
-        public bool RequiresRangedAttack { get; set; }
-        public bool RequiresSave { get; set; }
-        public string Save { get; set; }
-        public string Range { get; set; }
-        public string Area { get; set; }
-        public string SpellSchool { get; set; }
-        public string CastingTime { get; set; }
-        public bool Ritual { get; set; }
-        public IEnumerable<string> Classes { get; set; }
-        public string Source { get; set; }
+        public int? Id { get; protected set; }
+        public int Level { get; protected set; }
+        public string Name { get; protected set; }
+        public string Duration { get; protected set; }
+        public bool Concentration { get; protected set; }
+        public bool VerbalComponent { get; protected set; }
+        public bool SomaticComponent { get; protected set; }
+        public bool MaterialComponent { get; protected set; }
+        public int? MaterialComponentCost { get; protected set; }
+        public bool RequiresTouchAttack { get; protected set; }
+        public bool RequiresRangedAttack { get; protected set; }
+        public bool RequiresSave { get; protected set; }
+        public string Save { get; protected set; }
+        public string Range { get; protected set; }
+        public string Area { get; protected set; }
+        public string SpellSchool { get; protected set; }
+        public string CastingTime { get; protected set; }
+        public bool Ritual { get; protected set; }
+        public IEnumerable<string> Classes { get; protected set; }
+        public string Source { get; protected set; }
+
+        public static Spell Create(
+            int? id,
+            int level,
+            string name,
+            string duration,
+            bool concentration,
+            bool verbalComponent,
+            bool somaticComponent,
+            bool materialComponent,
+            int? materialComponentCost,
+            bool requiresTouchAttack,
+            bool requiresRangedAttack,
+            bool requiresSave,
+            string save,
+            string range,
+            string area,
+            string spellSchool,
+            string castingTime,
+            bool ritual,
+            IEnumerable<string> classes,
+            string source) => 
+
+            new Spell()
+            {
+                Id = id,
+                Level = level,
+                Name = name,
+                Duration = duration,
+                Concentration = concentration,
+                VerbalComponent = verbalComponent,
+                SomaticComponent = somaticComponent,
+                MaterialComponent = materialComponent,
+                MaterialComponentCost = materialComponentCost,
+                RequiresTouchAttack = requiresTouchAttack,
+                RequiresRangedAttack = requiresRangedAttack,
+                RequiresSave = requiresSave,
+                Save = save,
+                Range = range,
+                Area = area,
+                SpellSchool = spellSchool,
+                CastingTime = castingTime,
+                Ritual = ritual,
+                Classes = classes,
+                Source = source
+        };
+
+
+        public void UpdateLevel(int level)
+        {
+            this.Level = level;
+        }
     }
 }
