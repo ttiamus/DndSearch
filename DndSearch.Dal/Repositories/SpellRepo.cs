@@ -7,15 +7,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DndSearch.Common.Exceptions;
 
 namespace DndSearch.Dal.Repositories
 {
     public class SpellRepo : RepoBase<Entity.Spell>, ISpellRepo
     {
-        public int CreateSpell(Spell newSpell)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public IEnumerable<Spell> GetAllSpells()
         {
@@ -23,11 +22,6 @@ namespace DndSearch.Dal.Repositories
         }
 
         public Spell GetSpell(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveSpell(int spellId)
         {
             throw new NotImplementedException();
         }
@@ -42,10 +36,33 @@ namespace DndSearch.Dal.Repositories
             throw new NotImplementedException();
         }
 
-        public void UpdateSpell(Spell spell)
+        public void RemoveSpell(int spellId)
         {
             throw new NotImplementedException();
         }
+
+        public int SaveSpell(Spell spell)
+        {
+            return spell.Id.HasValue ? this.UpdateSpell(spell) : this.CreateSpell(spell);
+        }
+
+        internal async Task<int> CreateSpell(Spell newSpell)
+        {
+            var entity = newSpell.ToEntity();
+            return this.Add(entity, true);
+        }
+
+        internal async Task<int> UpdateSpell(Spell spell)
+        {
+            var currentSpell = this.Find(s => s.Id == spell.Id);
+            if(currentSpell == null)
+                throw new ResourceNotFoundException()
+            //Update currentSpell
+
+            return this.Update(currentSpell);
+        }
+
+        
     }
 
     internal static class SpellMapper
@@ -99,7 +116,5 @@ namespace DndSearch.Dal.Repositories
             Source = spell.Source
         };
         public static IEnumerable<Entity.Spell> ToEntity(this IEnumerable<Spell> spells) => spells.Select(spell => spell.ToEntity());
-
-        
     }
 }

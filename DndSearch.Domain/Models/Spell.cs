@@ -72,6 +72,10 @@ namespace DndSearch.Domain.Models
                 Source = source
         };
 
+        public static DndSearch.EntityFramework.Models.Spell ToEntity()
+        {
+            throw new NotImplementedException();
+        }
 
         public void UpdateLevel(int level)
         {

@@ -12,12 +12,14 @@ using System.Text;
 
 namespace DndSearch.Dal.Base
 {
+    //Make async methods for each possible asycn operation
+    
     public class RepoBase<T> : IDisposable, IRepo<T> where T : EntityBase, new()
     {
         protected readonly DndSearchContext Db;
         private readonly bool _disposeContext;
         private IDbContextTransaction _transaction;
-        protected DbSet<T> Table;
+        private DbSet<T> Table;     //Changed to private. No need to interact with this outside of here so far
         public DndSearchContext Context => Db;
 
         protected RepoBase() : this(new DndSearchContext())
@@ -63,7 +65,7 @@ namespace DndSearch.Dal.Base
 
         public T Find<TIncludeField>(Expression<Func<T, bool>> where,
             Expression<Func<T, TIncludeField>> include)
-            => Table.Where(@where).Include(include).FirstOrDefault();
+            => Table.Where(where).Include(include).FirstOrDefault();
 
         public IEnumerable<T> GetSome(Expression<Func<T, bool>> where)
             => Table.Where(where);
@@ -115,7 +117,7 @@ namespace DndSearch.Dal.Base
         {
             var now = DateTime.Now;
             entity.Updated = now;
-            Table.Update(entity);
+            Table.Update (entity);
             return persist ? SaveChanges() : 0;
         }
         public virtual int UpdateRange(IEnumerable<T> entities, bool persist = true)
