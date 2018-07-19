@@ -46,8 +46,26 @@ namespace DndSearch.Dal.Base
         public virtual IEnumerable<T> GetAll() => Table;
         public IEnumerable<T> GetAll<TIncludeField>(Expression<Func<T, TIncludeField>> include)
             => Table.Include(include);
-        public IEnumerable<T> GetAll<TSortField>(Expression<Func<T, TSortField>> orderBy, bool ascending)
-            => ascending ? Table.OrderBy(orderBy) : Table.OrderByDescending(orderBy);
+        public IEnumerable<T> GetAll<TSortField>(Expression<Func<T, TSortField>> orderBy, bool ascending) 
+            => ascending? Table.OrderBy(orderBy) : Table.OrderByDescending(orderBy);
+        public IEnumerable<T> GetAll<TSortField>(bool ascending, params Expression<Func<T, TSortField>>[] orderBys)
+        {
+            IOrderedQueryable<T> temporaryQueryable = null;
+
+            foreach (Expression<Func<T, TSortField>> orderBy in orderBys)
+            {
+                if (temporaryQueryable == null)
+                {
+                    temporaryQueryable = ascending ? this.Table.OrderBy(orderBy) : this.Table.OrderByDescending(orderBy);
+                }
+                else
+                {
+                    temporaryQueryable = ascending ? temporaryQueryable.ThenBy(orderBy): temporaryQueryable.ThenByDescending(orderBy);
+                };
+            };
+            return temporaryQueryable;
+        }
+
         public IEnumerable<T> GetAll<TIncludeField, TSortField>(
             Expression<Func<T, TIncludeField>> include, Expression<Func<T, TSortField>> orderBy, bool ascending)
             => ascending ? Table.Include(include).OrderBy(orderBy) : Table.Include(include).OrderByDescending(orderBy);

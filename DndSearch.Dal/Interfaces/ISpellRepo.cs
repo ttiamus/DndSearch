@@ -14,8 +14,7 @@ namespace DndSearch.Dal.Interfaces
         IEnumerable<Spell> SearchSpellName(string searchTerm);
         IEnumerable<Spell> GetAllSpells();
         IEnumerable<Spell> SearchSpells(Expression<Func<Spell, bool>> searchParams);
-        int CreateSpell(Spell newSpell);
+        int SaveSpell(Spell spell);
         void RemoveSpell(int spellId);
-        void UpdateSpell(Spell spell);
     }
 }

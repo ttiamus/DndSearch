@@ -43,7 +43,7 @@ namespace DndSearch.Services.Services
                 classes: request.Classes,
                 source: request.Source);
 
-            return this.spellRepo.CreateSpell(newSpell);
+            return this.spellRepo.SaveSpell(newSpell);
         }
 
         public Spell GetSpell(int id)
@@ -68,7 +68,7 @@ namespace DndSearch.Services.Services
 
             var spell = this.spellRepo.GetSpell(request.Id.Value);
             //do updates
-            this.spellRepo.UpdateSpell(spell);
+            this.spellRepo.SaveSpell(spell);
         }
     }
 }

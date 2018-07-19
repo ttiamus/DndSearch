@@ -9,65 +9,62 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DndSearch.Common.Exceptions;
+using DndSearch.Common.Expressions;
 
 namespace DndSearch.Dal.Repositories
 {
     public class SpellRepo : RepoBase<Entity.Spell>, ISpellRepo
     {
-        
-
         public IEnumerable<Spell> GetAllSpells()
         {
-            throw new NotImplementedException();
+            return base.GetAll(spell => spell.Level, true).ToDomainModel();
         }
-
+        
         public Spell GetSpell(int id)
         {
-            throw new NotImplementedException();
+            return base.Find(id).ToDomainModel(); //Retruns null if nout found
         }
 
         public IEnumerable<Spell> SearchSpellName(string searchTerm)
         {
-            throw new NotImplementedException();
+            return base.GetSome(spell => spell.Name.Contains(searchTerm), spell => spell.Level, true).ToDomainModel();
         }
 
         public IEnumerable<Spell> SearchSpells(Expression<Func<Spell, bool>> searchParams)
         {
-            throw new NotImplementedException();
+            if (searchParams == null)
+                throw new ArgumentNullException("searchParams");
+
+            var where = ExpressionConverter.ChangeInputType<Spell, Entity.Spell, bool>(searchParams);
+            return base.GetSome(where).ToDomainModel();
         }
 
         public void RemoveSpell(int spellId)
         {
-            throw new NotImplementedException();
+            var entity = base.Find(spellId);
+            if (entity == null)
+                throw new ResourceNotFoundException();  //Could also return from here. If we can't find the entity then it doesn't exist so is effectively deleted
+
+            base.Delete(entity);
         }
 
         public int SaveSpell(Spell spell)
         {
-            return spell.Id.HasValue ? this.UpdateSpell(spell) : this.CreateSpell(spell);
+            if (spell == null)
+                throw new ArgumentNullException("spell");
+
+            var entity = spell.ToEntityModel();
+            if (spell.Id.HasValue)
+                base.Update(entity, true);
+            else
+                base.Add(entity, true);
+            return entity.Id;
         }
-
-        internal async Task<int> CreateSpell(Spell newSpell)
-        {
-            var entity = newSpell.ToEntity();
-            return this.Add(entity, true);
-        }
-
-        internal async Task<int> UpdateSpell(Spell spell)
-        {
-            var currentSpell = this.Find(s => s.Id == spell.Id);
-            if(currentSpell == null)
-                throw new ResourceNotFoundException()
-            //Update currentSpell
-
-            return this.Update(currentSpell);
-        }
-
-        
     }
 
     internal static class SpellMapper
     {
-        public static Spell ToDomain(this Entity.Spell spell) => Spell.Create(
+        public static Spell ToDomainModel(this Entity.Spell spell) => Spell.Create(
             id: spell.Id,
             level: spell.Level,
             name: spell.Name,
@@ -90,9 +87,9 @@ namespace DndSearch.Dal.Repositories
             source: spell.Source
         );
 
-        public static IEnumerable<Spell> ToDomain(this IEnumerable<Entity.Spell> spells) => spells.Select(spell => spell.ToDomain());
+        public static IEnumerable<Spell> ToDomainModel(this IEnumerable<Entity.Spell> spells) => spells.Select(spell => spell.ToDomainModel());
 
-        public static Entity.Spell ToEntity(this Spell spell) => new Entity.Spell()
+        public static Entity.Spell ToEntityModel(this Spell spell) => new Entity.Spell()
         {
             Id = spell.Id ?? default(int),
             Level = spell.Level,
@@ -115,6 +112,6 @@ namespace DndSearch.Dal.Repositories
             Classes = spell.Classes,
             Source = spell.Source
         };
-        public static IEnumerable<Entity.Spell> ToEntity(this IEnumerable<Spell> spells) => spells.Select(spell => spell.ToEntity());
+        public static IEnumerable<Entity.Spell> ToEntityModel(this IEnumerable<Spell> spells) => spells.Select(spell => spell.ToEntityModel());
     }
 }
